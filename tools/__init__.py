@@ -1,0 +1,1 @@
+# Tool management for token-efficient MCP server

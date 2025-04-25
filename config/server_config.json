@@ -1,0 +1,23 @@
+{
+  "server": {
+    "cache_size": 1000,
+    "batch_size": 100,
+    "compression": true,
+    "token_budget": 10000
+  },
+  "monitoring": {
+    "thresholds": {
+      "warning": 8000,
+      "critical": 9500
+    },
+    "alert_handlers": ["log", "notify"]
+  },
+  "resources": {
+    "default_chunk_size": 100,
+    "compression_level": "medium"
+  },
+  "tools": {
+    "default_token_budget": 1000,
+    "cache_size": 100
+  }
+}

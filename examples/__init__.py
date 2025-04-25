@@ -1,0 +1,1 @@
+# Example implementations for token-efficient MCP server

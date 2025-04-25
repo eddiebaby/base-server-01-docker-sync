@@ -1,0 +1,1 @@
+# Resource management for token-efficient MCP server
