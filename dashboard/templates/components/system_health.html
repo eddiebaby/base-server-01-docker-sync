@@ -1,0 +1,54 @@
+<div class="system-health-metrics">
+    <div class="metric-row">
+        <div class="metric-card" id="cpuUsageCard">
+            <h3>CPU Usage</h3>
+            <div class="metric-value">
+                <div class="gauge-container">
+                    <canvas id="cpuGauge" width="120" height="120"></canvas>
+                    <div class="gauge-value" id="cpuValue">0%</div>
+                </div>
+            </div>
+            <div class="metric-details" id="cpuDetails">
+                <p>Cores: <span id="cpuCores">Loading...</span></p>
+                <p>Average Load: <span id="cpuLoad">Loading...</span></p>
+            </div>
+        </div>
+
+        <div class="metric-card" id="memoryUsageCard">
+            <h3>Memory Usage</h3>
+            <div class="metric-value">
+                <div class="gauge-container">
+                    <canvas id="memoryGauge" width="120" height="120"></canvas>
+                    <div class="gauge-value" id="memoryValue">0%</div>
+                </div>
+            </div>
+            <div class="metric-details" id="memoryDetails">
+                <p>Total: <span id="memoryTotal">Loading...</span></p>
+                <p>Available: <span id="memoryAvailable">Loading...</span></p>
+            </div>
+        </div>
+
+        <div class="metric-card" id="diskUsageCard">
+            <h3>Disk Usage</h3>
+            <div class="metric-value">
+                <div class="gauge-container">
+                    <canvas id="diskGauge" width="120" height="120"></canvas>
+                    <div class="gauge-value" id="diskValue">0%</div>
+                </div>
+            </div>
+            <div class="metric-details" id="diskDetails">
+                <p>Total Space: <span id="diskTotal">Loading...</span></p>
+                <p>Free Space: <span id="diskFree">Loading...</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="recent-errors-section">
+        <h3>Recent System Errors</h3>
+        <div class="error-list-container">
+            <ul class="error-list" id="recentErrorsList">
+                <li class="error-item placeholder">No recent errors</li>
+            </ul>
+        </div>
+    </div>
+</div>

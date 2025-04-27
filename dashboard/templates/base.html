@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="System Monitoring Dashboard">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>{% block title %}System Monitoring Dashboard{% endblock %}</title>
+    
+    <!-- Security headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    
+    <!-- Additional CSS in child templates -->
+    {% block additional_css %}{% endblock %}
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="Dashboard Logo" class="logo">
+                <h1>System Monitoring Dashboard</h1>
+            </div>
+            
+            <div class="user-controls">
+                {% if current_user.is_authenticated %}
+                <span class="username">{{ current_user.username }}</span>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+                {% endif %}
+            </div>
+        </header>
+        
+        <div class="app-content">
+            {% if current_user.is_authenticated %}
+            <nav class="sidebar">
+                {% include 'components/sidebar.html' %}
+            </nav>
+            {% endif %}
+            
+            <main class="main-content">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="flash-messages">
+                            {% for category, message in messages %}
+                                <div class="flash-message {{ category }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                
+                {% block content %}
+                <!-- Page content will be inserted here -->
+                {% endblock %}
+            </main>
+        </div>
+        
+        <footer class="app-footer">
+            {% include 'components/footer.html' %}
+        </footer>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    
+    <!-- Additional scripts in child templates -->
+    {% block additional_scripts %}{% endblock %}
+</body>
+</html>

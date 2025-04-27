@@ -1,207 +1,134 @@
-# Token-Efficient MCP Server Implementation
+# Schwab API Client
 
-A high-performance Model Context Protocol (MCP) server implementation with built-in token optimization and monitoring.
+A modular Python client for interacting with Charles Schwab API with OAuth authentication support.
 
 ## Features
 
-- **Token-Efficient Resource Management**
-  - Streaming data access
-  - Chunked processing
-  - Efficient caching
-  - Compression support
-
-- **Token-Aware Tool Management**
-  - Token budget enforcement
-  - Result streaming
-  - Batch processing
-  - Cache optimization
-
-- **Comprehensive Token Monitoring**
-  - Real-time usage tracking
-  - Budget thresholds
-  - Alert system
-  - Usage analytics
-
-## Architecture
-
-The server is built around four core components:
-
-1. **Core Server (core/server.py)**
-   - Central coordination
-   - Request handling
-   - Configuration management
-   - Component integration
-
-2. **Resource Manager (resources/manager.py)**
-   - Resource registration
-   - Streaming access
-   - Chunk management
-   - Resource caching
-
-3. **Tool Manager (tools/manager.py)**
-   - Tool registration
-   - Token budgeting
-   - Result streaming
-   - Tool caching
-
-4. **Token Monitor (monitoring/token_monitor.py)**
-   - Usage tracking
-   - Budget enforcement
-   - Alert handling
-   - Metrics collection
+- **Modular Design**: Clean separation of concerns with well-defined interfaces
+- **OAuth Authentication**: Complete OAuth 2.0 flow implementation
+- **Secure Storage**: Cross-platform secure credential storage
+- **Market Data**: Access to market data endpoints
+- **Extensible**: Easy to add support for additional API endpoints
+- **Developer-Friendly**: Clear documentation and examples
 
 ## Installation
 
-1. Clone the repository
-2. Install dependencies:
 ```bash
-pip install -r requirements.txt
+# Clone the repository
+git clone https://github.com/yourusername/schwab-api-client.git
+cd schwab-api-client
+
+# Install the package
+pip install -e .
 ```
 
-## Configuration
+## Quick Start
 
-Configure the server through `config/server_config.json`:
-
-```json
-{
-  "server": {
-    "cache_size": 1000,
-    "batch_size": 100,
-    "compression": true,
-    "token_budget": 10000
-  },
-  "monitoring": {
-    "thresholds": {
-      "warning": 8000,
-      "critical": 9500
-    }
-  }
-}
-```
-
-## Usage
-
-### Basic Server Setup
+### Authentication
 
 ```python
-from core.server import MCPServer
+from schwab_api.core import SchwabAPI
+from schwab_api.config.settings import SettingsManager
+from schwab_api.config.secure_storage import SecureStorage
+from schwab_api.auth.oauth.oauth_client import OAuthClient
+from schwab_api.auth.oauth.token_manager import TokenManager
+from schwab_api.auth.oauth.callback_server import CallbackServer
 
-# Initialize server
-server = MCPServer()
+# Set up configuration
+settings = SettingsManager()
+storage = SecureStorage("./config")
 
-# Register resources and tools
-server.register_resource(my_resource, "example/resource")
-server.register_tool(my_tool, "example_tool")
+# Set up OAuth components
+token_manager = TokenManager(storage, "market_data", settings)
+callback_server = CallbackServer()
 
-# Handle requests
-result = await server.handle_request({
-    "type": "tool",
-    "tool": "example_tool",
-    "operation": "execute",
-    "input": {...}
-})
+# Initialize OAuth client
+oauth_client = OAuthClient(
+    "market_data",
+    "YOUR_CLIENT_ID",
+    "YOUR_CLIENT_SECRET",
+    settings,
+    token_manager,
+    callback_server
+)
+
+# Initialize API
+api = SchwabAPI(oauth_client, settings)
+
+# Authenticate (opens browser for OAuth flow if needed)
+if api.authenticate():
+    print("Authentication successful!")
+else:
+    print("Authentication failed")
 ```
 
-### Creating Resources
-
-Implement the `Resource` interface for token-efficient data access:
+### Getting Market Data
 
 ```python
-from resources.manager import Resource, ResourceMetadata
+# Get quotes for symbols
+quotes = api.get_quotes(["AAPL", "MSFT", "GOOGL"])
+print(quotes)
 
-class MyResource(Resource):
-    def get_chunk(self, start: int, size: int) -> bytes:
-        # Implement chunked data access
-        pass
-        
-    def get_metadata(self) -> ResourceMetadata:
-        # Return resource metadata
-        pass
-        
-    def estimate_chunk_tokens(self, chunk_size: int) -> int:
-        # Estimate token usage
-        pass
+# Access market data specific methods
+price_history = api.market_data.get_price_history("AAPL", period=10)
 ```
 
-### Creating Tools
+## Project Structure
 
-Implement the `Tool` interface for token-aware processing:
-
-```python
-from tools.manager import Tool, ToolMetadata
-
-class MyTool(Tool):
-    def estimate_tokens(self, input_data: dict) -> int:
-        # Estimate token usage
-        pass
-        
-    async def execute(self, input_data: dict) -> Iterator[dict]:
-        # Implement token-efficient processing
-        pass
-        
-    def get_metadata(self) -> ToolMetadata:
-        # Return tool metadata
-        pass
+```
+schwab_api/
+├── __init__.py           # Package initialization
+├── core.py               # Core API interface
+├── auth/                 # Authentication components
+│   ├── __init__.py
+│   ├── auth_manager.py   # Abstract authentication interface
+│   ├── exceptions.py     # Authentication-related exceptions
+│   └── oauth/            # OAuth implementation
+│       ├── __init__.py
+│       ├── oauth_client.py     # OAuth client
+│       ├── token_manager.py    # Token management
+│       └── callback_server.py  # OAuth callback server
+├── config/               # Configuration components
+│   ├── __init__.py
+│   ├── secure_storage.py # Secure credential storage
+│   └── settings.py       # Settings management
+└── market_data/          # Market data components
+    ├── __init__.py
+    └── market_data_client.py # Market data access
 ```
 
-### Token Monitoring
+## Secure Credential Storage
 
-Monitor token usage and get statistics:
+The library securely stores credentials and tokens:
 
-```python
-# Get server statistics
-stats = server.get_stats()
-print(f"Token Usage: {stats['token_usage']}")
-print(f"Cache Stats: {stats['cache']}")
+- On Windows: Uses Windows Data Protection API (DPAPI)
+- On macOS/Linux: Uses system-derived encryption keys
 
-# Configure alerts
-def token_alert(request_id: str, usage: int, threshold: int):
-    print(f"Token alert: Request {request_id} used {usage} tokens")
+## OAuth Flow
 
-server.token_monitor.alert_handlers['warning'] = token_alert
-```
+1. Client requests authentication
+2. If no valid tokens exist, browser opens for authentication
+3. User logs in and authorizes the application
+4. Authorization code is returned via callback
+5. Code is exchanged for access and refresh tokens
+6. Tokens are securely stored for future use
+7. Subsequent requests use the stored access token
+8. Expired tokens are automatically refreshed when possible
 
-## Example Implementation
+## Examples
 
-See `examples/text_processing.py` for a complete example showing:
-- Text resource with streaming
-- Text analysis tool with batching
-- Token monitoring and caching
-- Request handling
+Check the `examples/` directory for complete usage examples:
 
-Run the example:
-```bash
-python -m examples.text_processing
-```
+- `oauth_demo.py`: Demonstrates OAuth authentication and basic API usage
 
-## Best Practices
+## Future Additions
 
-1. **Resource Implementation**
-   - Use streaming for large data
-   - Implement efficient chunking
-   - Optimize metadata
-   - Cache appropriately
-
-2. **Tool Implementation**
-   - Estimate tokens accurately
-   - Stream results when possible
-   - Use batch processing
-   - Handle budget limits
-
-3. **Token Optimization**
-   - Monitor usage patterns
-   - Set appropriate thresholds
-   - Use caching strategically
-   - Compress when beneficial
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Implement changes
-4. Add tests
-5. Submit pull request
+- Account and trading API support
+- Historical data analysis tools
+- Portfolio management
+- Order execution and management
+- Real-time data streaming
 
 ## License
 
-MIT License - See LICENSE file for details
+This project is licensed under the MIT License - see the LICENSE file for details.

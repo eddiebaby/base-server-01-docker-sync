@@ -1,0 +1,15 @@
+<header class="dashboard-header">
+    <div class="logo">
+        <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="Logo" class="logo-img">
+        <span class="logo-text">Base Server Monitor</span>
+    </div>
+    <div class="header-actions">
+        <div class="last-updated">
+            Last updated: <span id="lastUpdatedTime">Loading...</span>
+        </div>
+        <div class="user-menu">
+            <span class="username">{{ session.get('username', 'User') }}</span>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Log Out</a>
+        </div>
+    </div>
+</header>

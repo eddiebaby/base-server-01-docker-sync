@@ -1,0 +1,298 @@
+{% extends "base.html" %}
+
+{% block title %}System Monitoring Dashboard{% endblock %}
+
+{% block additional_css %}
+<style>
+    .dashboard-panels {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .panel {
+        background-color: #fff;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+    }
+    
+    .panel-header {
+        border-bottom: 1px solid #eee;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .panel-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .refresh-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #007bff;
+    }
+    
+    .status-indicator {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 8px;
+    }
+    
+    .status-healthy {
+        background-color: #28a745;
+    }
+    
+    .status-warning {
+        background-color: #ffc107;
+    }
+    
+    .status-critical {
+        background-color: #dc3545;
+    }
+    
+    .status-unknown {
+        background-color: #6c757d;
+    }
+    
+    .metrics-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .metrics-table th,
+    .metrics-table td {
+        text-align: left;
+        padding: 0.5rem;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .metrics-table th {
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>System Monitoring Dashboard</h2>
+    <p class="last-updated">Last updated: <span id="last-updated-time">Loading...</span></p>
+    
+    <div class="dashboard-panels">
+        <!-- System Health Panel -->
+        <div class="panel" id="system-health-panel">
+            <div class="panel-header">
+                <h3 class="panel-title">
+                    <span class="status-indicator" id="system-status-indicator"></span>
+                    System Health
+                </h3>
+                <button class="refresh-button" data-panel="system-health">
+                    <span class="refresh-icon">↻</span>
+                </button>
+            </div>
+            <div class="panel-content" id="system-health-content">
+                {% include 'components/system_health.html' %}
+            </div>
+        </div>
+        
+        <!-- Database Statistics Panel -->
+        <div class="panel" id="database-stats-panel">
+            <div class="panel-header">
+                <h3 class="panel-title">
+                    <span class="status-indicator" id="database-status-indicator"></span>
+                    Database Statistics
+                </h3>
+                <button class="refresh-button" data-panel="database-stats">
+                    <span class="refresh-icon">↻</span>
+                </button>
+            </div>
+            <div class="panel-content" id="database-stats-content">
+                {% include 'components/database_stats.html' %}
+            </div>
+        </div>
+        
+        <!-- Pipeline Metrics Panel -->
+        <div class="panel" id="pipeline-metrics-panel">
+            <div class="panel-header">
+                <h3 class="panel-title">
+                    <span class="status-indicator" id="pipeline-status-indicator"></span>
+                    Pipeline Metrics
+                </h3>
+                <button class="refresh-button" data-panel="pipeline-metrics">
+                    <span class="refresh-icon">↻</span>
+                </button>
+            </div>
+            <div class="panel-content" id="pipeline-metrics-content">
+                {% include 'components/pipeline_metrics.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block additional_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize dashboard
+        const refreshInterval = {{ refresh_interval|default(60) }} * 1000; // Convert to milliseconds
+        
+        // Load initial data
+        loadDashboardData();
+        
+        // Set up periodic refresh
+        setInterval(loadDashboardData, refreshInterval);
+        
+        // Set up manual refresh buttons
+        document.querySelectorAll('.refresh-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const panel = this.getAttribute('data-panel');
+                refreshPanel(panel);
+            });
+        });
+    });
+    
+    function loadDashboardData() {
+        fetch('/api/metrics')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                updateDashboard(data);
+            })
+            .catch(error => {
+                console.error('Error fetching dashboard data:', error);
+            });
+    }
+    
+    function refreshPanel(panel) {
+        let endpoint = '';
+        let updateFunction = null;
+        
+        switch(panel) {
+            case 'system-health':
+                endpoint = '/api/system-health';
+                updateFunction = updateSystemHealth;
+                break;
+            case 'database-stats':
+                endpoint = '/api/database-stats';
+                updateFunction = updateDatabaseStats;
+                break;
+            case 'pipeline-metrics':
+                endpoint = '/api/pipeline-metrics';
+                updateFunction = updatePipelineMetrics;
+                break;
+            default:
+                console.error('Unknown panel:', panel);
+                return;
+        }
+        
+        fetch(endpoint)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (updateFunction) {
+                    updateFunction(data);
+                }
+            })
+            .catch(error => {
+                console.error(`Error refreshing panel ${panel}:`, error);
+            });
+    }
+    
+    function updateDashboard(data) {
+        // Update last updated time
+        document.getElementById('last-updated-time').textContent = new Date().toLocaleString();
+        
+        // Update system status indicator
+        updateSystemStatusIndicator(data.system_status);
+        
+        // Update individual panels if data is available
+        if (data.system) {
+            updateSystemHealth(data.system);
+        }
+        
+        if (data.database) {
+            updateDatabaseStats(data.database);
+        }
+        
+        if (data.pipeline) {
+            updatePipelineMetrics(data.pipeline);
+        }
+    }
+    
+    // Update functions for each panel will be implemented in their component scripts
+    // Basic implementation as placeholder
+    function updateSystemStatusIndicator(status) {
+        const indicator = document.getElementById('system-status-indicator');
+        indicator.className = 'status-indicator';
+        
+        switch(status) {
+            case 'healthy':
+                indicator.classList.add('status-healthy');
+                break;
+            case 'warning':
+                indicator.classList.add('status-warning');
+                break;
+            case 'critical':
+                indicator.classList.add('status-critical');
+                break;
+            default:
+                indicator.classList.add('status-unknown');
+        }
+    }
+    
+    function updateSystemHealth(data) {
+        const content = document.getElementById('system-health-content');
+        // This would update the DOM with the new data
+        // Simplified for demonstration
+        if (data.error) {
+            content.innerHTML = `<div class="error-message">${data.error}</div>`;
+            return;
+        }
+        
+        // In a real implementation, this would update the DOM more elegantly
+        // This is just a placeholder
+        content.innerHTML = '<div>System health data updated</div>';
+    }
+    
+    function updateDatabaseStats(data) {
+        const content = document.getElementById('database-stats-content');
+        const indicator = document.getElementById('database-status-indicator');
+        
+        // Update connection status indicator
+        indicator.className = 'status-indicator';
+        if (data.connection_status === 'connected') {
+            indicator.classList.add('status-healthy');
+        } else {
+            indicator.classList.add('status-critical');
+        }
+        
+        // In a real implementation, this would update the DOM more elegantly
+        // This is just a placeholder
+        content.innerHTML = '<div>Database stats updated</div>';
+    }
+    
+    function updatePipelineMetrics(data) {
+        const content = document.getElementById('pipeline-metrics-content');
+        // In a real implementation, this would update the DOM more elegantly
+        // This is just a placeholder
+        content.innerHTML = '<div>Pipeline metrics updated</div>';
+    }
+</script>
+{% endblock %}

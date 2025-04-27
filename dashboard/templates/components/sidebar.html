@@ -1,0 +1,54 @@
+<aside class="dashboard-sidebar">
+    <nav class="sidebar-nav">
+        <ul>
+            <li class="nav-item active">
+                <a href="#" class="nav-link" data-section="dashboard">
+                    <i class="icon dashboard-icon"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="system">
+                    <i class="icon system-icon"></i>
+                    <span>System Health</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="database">
+                    <i class="icon database-icon"></i>
+                    <span>Database</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="pipeline">
+                    <i class="icon pipeline-icon"></i>
+                    <span>Pipelines</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="logs">
+                    <i class="icon logs-icon"></i>
+                    <span>Error Logs</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-section="settings">
+                    <i class="icon settings-icon"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="sidebar-footer">
+        <div class="refresh-control">
+            <span>Auto-refresh: </span>
+            <select id="refreshInterval" class="refresh-select">
+                <option value="30">30s</option>
+                <option value="60" selected>1m</option>
+                <option value="300">5m</option>
+                <option value="600">10m</option>
+                <option value="0">Off</option>
+            </select>
+        </div>
+    </div>
+</aside>

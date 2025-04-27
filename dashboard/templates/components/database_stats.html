@@ -1,0 +1,61 @@
+<div class="database-stats">
+    <div class="connection-status">
+        <div class="status-indicator" id="dbConnectionStatus">
+            <span class="status-dot"></span>
+            <span class="status-text">Database Status: Loading...</span>
+        </div>
+    </div>
+
+    <div class="table-counts">
+        <h3>Database Tables</h3>
+        <div class="table-list-container">
+            <table class="data-table" id="tableCountsTable">
+                <thead>
+                    <tr>
+                        <th>Table Name</th>
+                        <th>Record Count</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="placeholder-row">
+                        <td colspan="3">Loading table data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="recent-data">
+        <h3>Recent Data Entries</h3>
+        <div class="recent-data-controls">
+            <label for="tableSelector">Select Table: </label>
+            <select id="tableSelector" class="table-selector">
+                <option value="">Select a table</option>
+            </select>
+        </div>
+        <div class="recent-data-container">
+            <table class="data-table" id="recentDataTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Data</th>
+                        <th>Created/Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="placeholder-row">
+                        <td colspan="3">Select a table to view recent entries</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="database-actions">
+        <button class="action-button refresh-btn" id="refreshDatabaseBtn">
+            <i class="icon refresh-icon"></i>
+            <span>Refresh Data</span>
+        </button>
+    </div>
+</div>

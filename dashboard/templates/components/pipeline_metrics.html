@@ -1,0 +1,40 @@
+<div class="pipeline-metrics">
+    <div class="pipeline-status-overview">
+        <h3>Pipeline Status Overview</h3>
+        <div class="pipeline-status-container">
+            <table class="data-table" id="pipelineStatusTable">
+                <thead>
+                    <tr>
+                        <th>Pipeline</th>
+                        <th>Status</th>
+                        <th>Last Run</th>
+                        <th>Processed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="placeholder-row">
+                        <td colspan="4">Loading pipeline status...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="pipeline-metrics-charts">
+        <div class="chart-container">
+            <h3>Processing Rates</h3>
+            <canvas id="processingRatesChart" width="400" height="200"></canvas>
+        </div>
+        <div class="chart-container">
+            <h3>Error Rates</h3>
+            <canvas id="errorRatesChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <div class="pipeline-actions">
+        <button class="action-button refresh-btn" id="refreshPipelineBtn">
+            <i class="icon refresh-icon"></i>
+            <span>Refresh Metrics</span>
+        </button>
+    </div>
+</div>

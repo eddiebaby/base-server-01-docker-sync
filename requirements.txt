@@ -1,15 +1,10 @@
-# Core dependencies
-aiohttp>=3.8.0  # For async HTTP server capabilities
-pydantic>=2.0.0  # For data validation and settings management
-
-# Development dependencies
-pytest>=7.0.0  # Testing framework
-pytest-asyncio>=0.18.0  # Async test support
-pytest-cov>=3.0.0  # Test coverage
-black>=22.0.0  # Code formatting
-isort>=5.10.0  # Import sorting
-mypy>=0.950  # Type checking
-pylint>=2.12.0  # Code linting
-
-# Monitoring and metrics
-prometheus-client>=0.14.0  # Metrics collection
+requests>=2.25.0
+numpy>=1.24.0     # Numerical computing
+requests>=2.31.0  # HTTP requests for data collection
+pytest>=7.4.0     # Testing framework
+python-dotenv>=1.0.0  # Environment variable management
+sqlalchemy>=2.0.0  # SQL toolkit and ORM
+dash>=2.14.0      # Dashboard framework
+plotly>=5.18.0    # Interactive visualizations
+Flask>=2.0.0      # Web framework
+Flask-Login>=0.6.0  # User session management

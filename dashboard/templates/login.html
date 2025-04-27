@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="System Monitoring Dashboard Login">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>Login - System Monitoring Dashboard</title>
+    
+    <!-- Security headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+    
+    <style>
+        /* Basic styling for the login page */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #212529;
+        }
+        
+        .login-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .login-logo {
+            max-width: 80px;
+            margin-bottom: 1rem;
+        }
+        
+        .login-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+            color: #343a40;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+        .error-message {
+            color: #dc3545;
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+        }
+        
+        .submit-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        
+        .submit-button:hover {
+            background-color: #0069d9;
+        }
+        
+        .submit-button:active {
+            background-color: #0062cc;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="Dashboard Logo" class="login-logo">
+            <h1 class="login-title">System Monitoring Dashboard</h1>
+        </div>
+        
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        <form class="login-form" method="post" action="{{ url_for('login') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required autocomplete="username">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required autocomplete="current-password">
+            </div>
+            
+            <button type="submit" class="submit-button">Login</button>
+        </form>
+    </div>
+    
+    <script>
+        // Simple form validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('.login-form');
+            
+            form.addEventListener('submit', function(event) {
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                let hasError = false;
+                
+                // Clear any previous error messages
+                document.querySelectorAll('.field-error').forEach(el => el.remove());
+                
+                // Validate username
+                if (username === '') {
+                    event.preventDefault();
+                    const usernameInput = document.getElementById('username');
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message field-error';
+                    errorDiv.textContent = 'Username is required';
+                    usernameInput.parentNode.appendChild(errorDiv);
+                    hasError = true;
+                }
+                
+                // Validate password
+                if (password === '') {
+                    event.preventDefault();
+                    const passwordInput = document.getElementById('password');
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message field-error';
+                    errorDiv.textContent = 'Password is required';
+                    passwordInput.parentNode.appendChild(errorDiv);
+                    hasError = true;
+                }
+                
+                if (hasError) {
+                    return false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

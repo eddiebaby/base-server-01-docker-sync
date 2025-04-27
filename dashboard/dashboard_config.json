@@ -1,0 +1,43 @@
+{
+    "dashboard": {
+        "title": "System Monitoring Dashboard",
+        "refresh_interval": 60,
+        "auto_refresh": true
+    },
+    "server": {
+        "host": "0.0.0.0",
+        "port": 5000,
+        "debug": false
+    },
+    "security": {
+        "enable_authentication": true,
+        "session_timeout": 3600,
+        "users": {
+            "admin": "$2b$12$8fUQHXARr7xrdvUQ.wRa6u/3JrDEYu45oi2iQG5Pn2eJ4wlYWTpFS"
+        }
+    },
+    "metrics": {
+        "database": {
+            "enabled": true,
+            "table_count_limit": 100,
+            "recent_data_limit": 5
+        },
+        "pipeline": {
+            "enabled": true,
+            "graph_points": 10,
+            "error_threshold": 10
+        },
+        "system": {
+            "enabled": true,
+            "cpu_warning_threshold": 80,
+            "memory_warning_threshold": 80,
+            "disk_warning_threshold": 85,
+            "error_history_limit": 20
+        }
+    },
+    "logging": {
+        "level": "INFO",
+        "file": "dashboard.log",
+        "rotation": "10 MB"
+    }
+}
