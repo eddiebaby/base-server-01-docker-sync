@@ -1,0 +1,44 @@
+# Docker .gitignore
+
+# Docker image files
+*.tar
+*.tar.gz
+
+# Docker build context
+.dockerignore
+
+# Docker environment files
+.env
+.env.*
+
+# Docker compose override files
+docker-compose.override.yml
+
+# Docker volumes
+data/
+volumes/
+
+# Docker logs
+*.log
+
+# Docker temporary files
+.docker/
+
+# Docker credentials
+.docker/config.json
+
+# Docker build cache
+.buildx/
+
+# Docker Desktop settings
+settings.json
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# OS specific files
+.DS_Store
+Thumbs.db
