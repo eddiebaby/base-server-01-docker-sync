@@ -1,59 +1,39 @@
-# Docker Compose configuration for multi-language development container
-# :ContainerizationPattern with :VolumeMapping and :EnvironmentConfiguration
-version: '3.8'
-
+version: '3'
 services:
-  # Main development environment
-  dev-environment:
+  mcp-server:
+    image: mcp-server:latest
     build:
-      context: .
+      context: ./server
       dockerfile: Dockerfile
-    container_name: multi-lang-dev
-    # :VolumeMapping for data persistence
-    volumes:
-      # Mount the current directory to /app in the container
-      - .:/app
-      # Dedicated volume for database files
-      - db-data:/app/db
-      # Dedicated volume for collected market data
-      - market-data:/app/data/market
-      # Volume for caching pip packages to speed up rebuilds
-      - pip-cache:/root/.cache/pip
-    # :EnvironmentConfiguration for development
-    environment:
-      - FLASK_APP=server.py
-      - FLASK_ENV=development
-      - FLASK_DEBUG=1
-      - PYTHONPATH=/app
-      # Prevent Python from writing bytecode files
-      - PYTHONDONTWRITEBYTECODE=1
-      # Ensure Python output is sent straight to terminal
-      - PYTHONUNBUFFERED=1
-    # Port mappings
     ports:
-      # Flask application
-      - "5000:5000"
-      # Additional ports for other services as needed
-      - "8000:8000"
       - "8080:8080"
-    # Keep the container running for development
-    tty: true
-    # Restart automatically in case of a crash
-    restart: unless-stopped
-    # Ensure the container has proper privileges to install dependencies
-    privileged: false
+    volumes:
+      - ./server/config:/app/config
+      - ./server/data:/app/data
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - MCP_UPDATE_INTERVAL=3600
+    networks:
+      - mcp-network
 
-# Named volumes for data persistence
-volumes:
-  # Database volume
-  db-data:
-    # :VolumeMapping for database persistence
-    driver: local
-  # Market data volume
-  market-data:
-    # :VolumeMapping for market data persistence
-    driver: local
-  # Pip cache volume
-  pip-cache:
-    # Cache pip packages to speed up rebuilds
-    driver: local
+  mcp-client:
+    image: mcp-client:latest
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    depends_on:
+      - mcp-server
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client/config:/app/config
+    restart: always
+    environment:
+      - MCP_SERVER_URL=ws://mcp-server:8080
+    networks:
+      - mcp-network
+
+networks:
+  mcp-network:
+    driver: bridge 
