@@ -19,7 +19,7 @@ from ..config.secure_storage import SecureStorage
 from .oauth.oauth_client import OAuthClient
 from .oauth.token_manager import TokenManager
 from .oauth.callback_server import CallbackServer
-from ...config.config_manager import config_manager
+from config.config_manager import config_manager
 
 # Configure logging
 logger = logging.getLogger('schwab_api.auth.oauth_integration')

@@ -1,3 +1,4 @@
+Set-Content -Path "$PSScriptRoot/Dockerfile" -Value @"
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /app
 
@@ -34,3 +35,4 @@ HEALTHCHECK --interval=30s --timeout=3s \
 
 # Set proper entry point with explicit command
 ENTRYPOINT ["dotnet", "TestApp.dll"]
+"@

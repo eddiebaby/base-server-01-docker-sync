@@ -1,4 +1,27 @@
-{ 
-  "repoUrl": "https://github.com/yourusername/mcp-server", 
-  "branch": "main" 
-} 
+{
+  "repoUrl": "https://github.com/eddiebaby/mcp-server",
+  "branch": "main",
+  "updateInterval": 21600,
+  "useAuthentication": true,
+  "credentials": {
+    "username": "your-github-username",
+    "token": "your-github-personal-access-token"
+  },
+  "clientServers": [
+    {
+      "name": "trading-client-1",
+      "url": "http://your-client-server-address:8080",
+      "apiKey": "your-secure-api-key-here"
+    }
+  ],
+  "notifications": {
+    "email": "your-email@example.com",
+    "slack": "https://hooks.slack.com/services/your-webhook-url"
+  },
+  "updateSettings": {
+    "installDependencies": true,
+    "restartServer": true,
+    "backupBeforeUpdate": true,
+    "backupPath": "./backups"
+  }
+}

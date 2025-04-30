@@ -1,8 +1,45 @@
 {
   "version": 2,
-  "dgSpecHash": "Tvyx8xUmNzmycq2FSM8avudQ967uMnOLg10kIbc14yFP1h+iJwl8b86JPNA4OiPjKxivnOX5Pn4wXDeQCpLGog==",
-  "success": true,
-  "projectFilePath": "/app/TestApp/TestApp.csproj",
+  "dgSpecHash": "hrop5gYBCQI=",
+  "success": false,
+  "projectFilePath": "C:\\Users\\scott\\Base_Server_01\\TestApp\\TestApp.csproj",
   "expectedPackageFiles": [],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.NETCore.App.Ref (= 7.0.20)' for 'net7.0'.",
+      "libraryId": "Microsoft.NETCore.App.Ref",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.WindowsDesktop.App.Ref (= 7.0.20)' for 'net7.0'.",
+      "libraryId": "Microsoft.WindowsDesktop.App.Ref",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.AspNetCore.App.Ref (= 7.0.20)' for 'net7.0'.",
+      "libraryId": "Microsoft.AspNetCore.App.Ref",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.NETCore.App.Host.win-x64 (= 7.0.20)' for 'net7.0'.",
+      "libraryId": "Microsoft.NETCore.App.Host.win-x64",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    }
+  ]
 }

@@ -37,37 +37,65 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 echo.
-echo Running Schwab API OAuth Example...
+echo Do you want to use the real Schwab API or the mock implementation?
+echo 1. Real Schwab API (requires valid credentials)
+echo 2. Mock implementation (for demonstration purposes)
 echo.
 
-set /p option="Configure credentials? (y/n): "
-if /i "%option%"=="y" (
-    python examples/schwab_oauth_simplified.py --save-credentials
-) else (
+choice /c 12 /n /m "Enter your choice (1 or 2): "
+set choice=%errorlevel%
+
+if "%choice%"=="1" (
+    echo.
+    echo Running Schwab API OAuth Example with real API...
+    echo.
+    
+    choice /c yn /n /m "Configure credentials? (y/n): "
+    set config_creds=%errorlevel%
+    
+    if "%config_creds%"=="1" (
+        call setup_schwab_credentials.bat
+    )
+    
+    echo.
+    echo Running OAuth example...
     python examples/schwab_oauth_simplified.py
+) else (
+    echo.
+    echo Running Mock Schwab API OAuth Demo...
+    echo.
+    python examples/mock_oauth_demo.py
 )
 
 echo.
 echo Example completed.
 echo.
 
-set /p run_more="Would you like to run more examples? (y/n): "
-if /i not "%run_more%"=="y" goto :eof
+choice /c yn /n /m "Would you like to run more examples? (y/n): "
+set more_examples=%errorlevel%
 
-echo.
-echo Available examples:
-echo 1. Standard OAuth Demo
-echo 2. Exit
-echo.
-
-set /p example="Select an example to run (1-2): "
-if "%example%"=="1" (
-    python examples/oauth_demo.py
-) else if "%example%"=="2" (
-    goto :eof
-) else (
-    echo Invalid selection.
+if "%more_examples%"=="1" (
+    echo.
+    echo Available examples:
+    echo 1. OAuth Demo
+    echo 2. Market Data Example
+    echo 3. Run OAuth Tests
+    echo.
+    
+    choice /c 123 /n /m "Enter your choice (1, 2, or 3): "
+    set example_choice=%errorlevel%
+    
+    if "%example_choice%"=="1" (
+        python examples/oauth_demo.py
+    ) else if "%example_choice%"=="2" (
+        python examples/market_data_example.py
+    ) else if "%example_choice%"=="3" (
+        call run_oauth_tests.bat
+    )
 )
 
 echo.
 echo Done.
+echo.
+
+pause

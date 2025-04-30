@@ -1,27 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "/app/TestApp/TestApp.csproj": {}
+    "C:\\Users\\scott\\Base_Server_01\\TestApp\\TestApp.csproj": {}
   },
   "projects": {
-    "/app/TestApp/TestApp.csproj": {
+    "C:\\Users\\scott\\Base_Server_01\\TestApp\\TestApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/app/TestApp/TestApp.csproj",
+        "projectUniqueName": "C:\\Users\\scott\\Base_Server_01\\TestApp\\TestApp.csproj",
         "projectName": "TestApp",
-        "projectPath": "/app/TestApp/TestApp.csproj",
-        "packagesPath": "/root/.nuget/packages/",
-        "outputPath": "/app/TestApp/obj/",
+        "projectPath": "C:\\Users\\scott\\Base_Server_01\\TestApp\\TestApp.csproj",
+        "packagesPath": "C:\\Users\\scott\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\scott\\Base_Server_01\\TestApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/root/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\scott\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
-        "sources": {
-          "https://api.nuget.org/v3/index.json": {}
-        },
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
@@ -32,7 +29,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
         "net7.0": {
@@ -48,12 +51,30 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[7.0.20, 7.0.20]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[7.0.20, 7.0.20]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[7.0.20, 7.0.20]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[7.0.20, 7.0.20]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/7.0.410/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }
